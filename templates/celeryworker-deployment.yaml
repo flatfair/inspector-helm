@@ -1,0 +1,33 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: celeryworker
+  labels:
+    app: {{ template "inspector.name" . }}
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        checksum/inspector-configmap: {{ include (print $.Template.BasePath "/inspector-configmap.yaml") . | sha256sum }}
+      labels:
+        app: {{ template "inspector.name" . }}
+        component: celeryworker
+    spec:
+      containers:
+      - args:
+        - /start-celeryworker
+        image: {{ .Values.image }}
+        name: celeryworker
+        envFrom:
+          - configMapRef:
+              name: "{{ template "inspector.name" . }}-env"
+        resources:
+{{ toYaml .Values.worker.resources | indent 10 }}
+      restartPolicy: Always
+      {{- if .Values.worker.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.worker.nodeSelector | indent 8 }}
+      {{- end }}
+status: {}

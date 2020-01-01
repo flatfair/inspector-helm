@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: inspector-web
+  labels:
+    app: {{ template "inspector.name" . }}
+    component: inspector-web
+    release: {{ .Release.Name }}
+  annotations:
+    {{ range $key, $value := .Values.ingress.inspector.annotations }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
+spec:
+  rules:
+    - http:
+        paths:
+          - path: {{ .Values.ingress.inspector.path }}
+            backend:
+              serviceName: inspector-web
+              servicePort: inspector
+      host: {{ .Values.ingress.inspector.host }}

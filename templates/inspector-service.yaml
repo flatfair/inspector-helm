@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: inspector-web
+  labels:
+    app: {{ template "inspector.name" . }}
+    component: inspector-web
+    release: {{ .Release.Name }}
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ template "inspector.name" . }}
+    component: inspector
+    release: {{ .Release.Name }}
+  ports:
+  - name: inspector
+    protocol: TCP
+    port: 5000
+    targetPort: 5000
+status:
+  loadBalancer: {}

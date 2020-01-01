@@ -1,0 +1,44 @@
+image: ms32035/inspector:master
+
+
+environment:
+  DJANGO_SETTINGS_MODULE: config.settings.production
+  REDIS_URL: redis://inspector-redis-master:6379/0
+  DJANGO_COLLECTFAST_STRATEGY: collectfast.strategies.filesystem.FileSystemStrategy
+  DJANGO_SECURE_SSL_REDIRECT: False
+  POSTGRES_USER: inspector
+  POSTGRES_PORT: 5432
+  POSTGRES_DB: inspector
+
+inspector:
+  nodeSelector: {}
+  resources: {}
+
+flower:
+  nodeSelector: {}
+  resources: {}
+
+worker:
+  nodeSelector: {}
+  resources: {}
+
+beat:
+  nodeSelector: {}
+  resources: {}
+
+ingress:
+  inspector:
+    path: ""
+    annotations: {}
+  flower:
+    path: ""
+    annotations: {}
+
+redis:
+  usePassword: false
+  master:
+    persistence:
+      enabled: false
+  cluster:
+    enabled: false
+    slaveCount: 0

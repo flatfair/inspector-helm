@@ -1,0 +1,41 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: inspector
+  labels:
+    app: {{ template "inspector.name" . }}
+    component: inspector
+    release: {{ .Release.Name }}
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        checksum/inspector-configmap: {{ include (print $.Template.BasePath "/inspector-configmap.yaml") . | sha256sum }}
+      labels:
+        app: {{ template "inspector.name" . }}
+        component: inspector
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+      - args:
+        - /start
+        envFrom:
+          - configMapRef:
+              name: "{{ template "inspector.name" . }}-env"
+        image: {{ .Values.image }}
+        imagePullPolicy: Always
+        name: inspector
+        ports:
+        - name: inspector
+          containerPort: 5000
+          protocol: TCP
+        resources:
+{{ toYaml .Values.inspector.resources | indent 10 }}
+      restartPolicy: Always
+      {{- if .Values.inspector.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.inspector.nodeSelector | indent 8 }}
+      {{- end }}
+status: {}

@@ -1,0 +1,34 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: celerybeat
+  labels:
+    app: {{ template "inspector.name" . }}
+    component: celerybeat
+spec:
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        checksum/inspector-configmap: {{ include (print $.Template.BasePath "/inspector-configmap.yaml") . | sha256sum }}
+      labels:
+        app: {{ template "inspector.name" . }}
+        component: celerybeat
+    spec:
+      containers:
+      - args:
+        - /start-celerybeat
+        image: {{ .Values.image }}
+        name: celerybeat
+        envFrom:
+          - configMapRef:
+              name: "{{ template "inspector.name" . }}-env"
+        resources:
+{{ toYaml .Values.beat.resources | indent 10 }}
+      restartPolicy: Always
+      {{- if .Values.beat.nodeSelector }}
+      nodeSelector:
+{{ toYaml .Values.beat.nodeSelector | indent 8 }}
+      {{- end }}
+status: {}

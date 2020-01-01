@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ template "inspector.name" . }}-env"
+  labels:
+    app: inspector
+data:
+  {{- range $setting, $option := .Values.environment }}
+  {{ $setting }}: "{{ $option }}"
+  {{- end }}
