@@ -24,7 +24,7 @@ spec:
         envFrom:
           - configMapRef:
               name: "{{ template "inspector.name" . }}-env"
-        image: {{ .Values.image }}
+        image: {{ template "inspector.image" . }}
         imagePullPolicy: Always
         name: "{{ template "inspector.name" . }}-flower"
         ports:

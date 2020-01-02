@@ -5,6 +5,19 @@ metadata:
   labels:
     app: inspector
 data:
+  POSTGRES_HOST: "{{ template "inspector.postgresql.host" . }}"
+  POSTGRES_USER: {{ .Values.postgresql.postgresqlUsername }}
+  POSTGRES_PORT: {{ .Values.postgresql.service.port }}
+  POSTGRES_DB: {{ .Values.postgresql.postgresqlDatabase }}
+  POSTGRES_PASSWORD: {{ .Values.postgresql.postgresqlPassword }}
+  CELERY_FLOWER_USER: {{ .Values.flower.user }}
+  CELERY_FLOWER_PASSWORD: {{ .Values.flower.password }}
+  DJANGO_ADMIN_URL: {{ .Values.inspector.django.adminUrl }}
+  DJANGO_COLLECTFAST_STRATEGY: {{ .Values.inspector.django.collectFastStrategy }}
+  DJANGO_SECRET_KEY: {{ .Values.inspector.django.secretKey }}
+  DJANGO_SETTINGS_MODULE: {{ .Values.inspector.django.settingsModule }}
+  DJANGO_SECURE_SSL_REDIRECT: {{ .Values.inspector.django.ssl.redirect }}
+  FIELD_ENCRYPTION_KEY: {{ .Values.inspector.django.fieldEncryptionKey }}
   {{- range $setting, $option := .Values.environment }}
   {{ $setting }}: "{{ $option }}"
   {{- end }}

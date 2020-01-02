@@ -19,7 +19,7 @@ spec:
       containers:
       - args:
         - /start-celerybeat
-        image: {{ .Values.image }}
+        image: {{ template "inspector.image" . }}
         name: celerybeat
         envFrom:
           - configMapRef:

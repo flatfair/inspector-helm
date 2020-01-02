@@ -1,24 +1,32 @@
-image: ms32035/inspector:master
+docker:
+  image: ms32035/inspector
+  tag: master
 
 
 environment:
-  DJANGO_SETTINGS_MODULE: config.settings.production
   REDIS_URL: redis://inspector-redis-master:6379/0
-  DJANGO_COLLECTFAST_STRATEGY: collectfast.strategies.filesystem.FileSystemStrategy
-  DJANGO_SECURE_SSL_REDIRECT: False
-  POSTGRES_USER: inspector
-  POSTGRES_PORT: 5432
-  POSTGRES_DB: inspector
 
 inspector:
+  django:
+    adminUrl: admin
+    collectFastStrategy: collectfast.strategies.filesystem.FileSystemStrategy
+    settingsModule: config.settings.production
+    ssl:
+      redirect: False
+    secretKey: 966212301e1bb593c31503b627e0d05355287c2da620bac98c7603cdc49729a4
+    fieldEncryptionKey: Ms096q5p7OoVLKPWy69et0JSoPNJacb98VvIZ7pdxYY=
+
   nodeSelector: {}
   resources: {}
 
 flower:
   nodeSelector: {}
   resources: {}
+  user: inspector
+  password: inspector
 
 worker:
+  replicas: 1
   nodeSelector: {}
   resources: {}
 
@@ -42,3 +50,12 @@ redis:
   cluster:
     enabled: false
     slaveCount: 0
+
+postgresql:
+  enabled: true
+  postgresqlUsername: inspector
+  postgresqlDatabase: inspector
+  postgresqlPassword: inspector
+
+  service:
+    port: 5432
