@@ -7,7 +7,11 @@ metadata:
     component: celerybeat
 spec:
   replicas: 1
-  strategy: {}
+  strategy: 
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   template:
     metadata:
       annotations:

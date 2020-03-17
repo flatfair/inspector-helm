@@ -2,13 +2,13 @@ apiVersion: v2
 description: Inspector
 name: inspector
 type: application
-version: 0.0.1
+version: 0.0.2
 appVersion: 0.0.1
 dependencies:
   - name: redis
-    version: 10.3.0
+    version: 10.5.7
     repository: https://kubernetes-charts.storage.googleapis.com/
   - name: postgresql
-    version: 8.1.2
+    version: 8.6.3
     repository: https://kubernetes-charts.storage.googleapis.com/
     condition: postgresql.enabled
